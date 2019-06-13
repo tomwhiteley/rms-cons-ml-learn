@@ -13,6 +13,8 @@ pandas = "*"
 numpy = "*"
 matplotlib = "*"
 seaborn = "*"
+requests = "*"
+rms-cons-rmsone-py-client = {editable = true,git = "https://github.com/RMS/rms-cons-rmsone-py-client.git"}
 
 [requires]
 python_version = "3.7"
