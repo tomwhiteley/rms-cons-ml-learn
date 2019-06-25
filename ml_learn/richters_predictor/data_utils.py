@@ -1,5 +1,6 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import OneHotEncoder
 import seaborn as sb
 import matplotlib.pyplot as plt
 
@@ -22,6 +23,22 @@ def load_combined_data(feature_names, label_names):
         train_labels = pd.read_csv('../../data/train_labels.csv', usecols=label_names.keys(), dtype=label_names)
 
     return train_values.merge(train_labels, left_index=True, right_index=True)
+
+
+def one_hot_encode_categories(categories, data):
+    """
+    Swap categorical columns for one hot encoding
+    :param categories: dictionary of category names and values
+    :param data: feature data frame
+    :return: feature data frame with categorical columns replaced
+    """
+    encoder2 = OneHotEncoder(handle_unknown="error", categories=list(categories.values()))
+    encoded_features2 = encoder2.fit_transform(data[categories.keys()])
+    columns = [f'{col}_{value}' for col, values in categories.items() for value in values]
+    new_column_data = pd.DataFrame(encoded_features2.toarray(), columns=columns)
+    data = data.drop(categories.keys(), axis=1)
+    data = pd.concat([data, new_column_data], axis=1)
+    return data
 
 
 def split_data(features_with_label, test_size):
